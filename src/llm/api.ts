@@ -1,8 +1,8 @@
 import OpenAI from "openai";
-import { fullContextMemory } from "./memory.ts";
+import { Memory } from "./memory.ts";
 import { allTools } from "./tools.ts";
 
-const apiKey = await Deno.readTextFile("../.key").then(text => text.trim());
+const apiKey = await Deno.readTextFile("../.key").then((text) => text.trim());
 const openai = new OpenAI({
   apiKey,
   baseURL: "https://api.deepseek.com/v1",
@@ -11,7 +11,7 @@ const openai = new OpenAI({
 export async function sendToLLm() {
   return await openai.chat.completions.create({
     model: "deepseek-reasoner",
-    messages: fullContextMemory,
+    messages: Memory.dumpToMessages(),
     stream: true,
     tools: allTools,
   });

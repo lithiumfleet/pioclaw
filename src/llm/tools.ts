@@ -24,17 +24,22 @@ interface DeepSeekTool {
 export let allTools: DeepSeekTool[] = [];
 const clients: Record<string, Client> = {};
 
-export async function callTool(toolName: string, args: unknown) {
+export async function callTool(
+  toolName: string,
+  args: unknown,
+): Promise<string> {
   for (const [_serverName, client] of Object.entries(clients)) {
     const { tools } = await client.listTools();
     // @ts-ignore:
     if (tools.some((t) => t.name === toolName)) {
-      return await client.callTool({
+      const result = await client.callTool({
         name: toolName,
         arguments: args,
       });
+      return result;
     }
   }
+  return `Tool "${toolName}" not found in any MCP server`;
 }
 
 async function initServers() {
@@ -69,7 +74,6 @@ async function initServers() {
   }
   allTools = convertMCPToDeepSeek(mcpTools);
 }
-
 
 function convertMCPToDeepSeek(mcpTools: MCPTool[]): DeepSeekTool[] {
   return mcpTools.map((tool) => ({

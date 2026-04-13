@@ -1,12 +1,12 @@
-import { sendToLLm } from "./api.ts";
-import { fullContextMemory } from "./memory.ts";
+import { sendToLLm } from "../llm/api.ts";
+import { Memory } from "../llm/memory.ts";
 
 export function createUserReqHandler() {
 
   return async (data: { prompt: string }) => {
     try {
       console.log("user: ", data.prompt);
-      fullContextMemory.push({ role: "user", content: data.prompt });
+      Memory.addToMemory({ role: "user", content: data.prompt });
       const res = await sendToLLm();
       return {
         type: "llmstreamres",
