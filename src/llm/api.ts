@@ -8,10 +8,10 @@ const openai = new OpenAI({
   baseURL: "https://api.deepseek.com/v1",
 });
 
-export async function sendToLLm() {
+export async function sendToLLm(memory: Memory) {
   return await openai.chat.completions.create({
     model: "deepseek-reasoner",
-    messages: Memory.dumpToMessages(),
+    messages: memory.dumpToMessages(),
     stream: true,
     tools: allTools,
   });

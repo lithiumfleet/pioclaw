@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 export type ToolCall = {
   id: string;
   type: "function";
@@ -24,14 +26,37 @@ type MessageRecord =
       content: string;
     };
 
-const fullContextMemory: MessageRecord[] = [];
+export interface Memory {
+  addToMemory(record: MessageRecord): void;
+  dumpToMessages(): MessageRecord[];
+}
 
-export class Memory {
-  static addToMemory(record: MessageRecord) {
-    fullContextMemory.push(record);
+const memoryIdMap = new Map<string, Memory>();
+
+export function memoryManager() {
+  return {
+    newMemory(): string {
+      const uuid = randomUUID();
+      memoryIdMap.set(uuid, new MemoryImpl());
+      return uuid;
+    },
+    getMemory(id: string): Memory {
+      if (!memoryIdMap.has(id)) {
+        console.error(`Can not find memory by id: ${id}. Return a new one...`);
+        const newId = this.newMemory();
+        return this.getMemory(newId);
+      }
+      return memoryIdMap.get(id)!;
+    },
+  };
+}
+
+class MemoryImpl implements Memory {
+  private fullContextMemory: MessageRecord[] = [];
+  addToMemory(record: MessageRecord) {
+    this.fullContextMemory.push(record);
   }
-
-  static dumpToMessages() {
-    return fullContextMemory;
+  dumpToMessages() {
+    return this.fullContextMemory;
   }
 }

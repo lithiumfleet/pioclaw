@@ -4,7 +4,9 @@
     "jsr:@hono/hono@^4.12.12": "4.12.12",
     "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/internal@^1.0.12": "1.0.12",
+    "npm:@hono/node-server@^1.19.14": "1.19.14_hono@4.12.12",
     "npm:@modelcontextprotocol/sdk@^1.29.0": "1.29.0_zod@4.3.6",
+    "npm:hono@^4.12.12": "4.12.12",
     "npm:openai@^6.34.0": "6.34.0_zod@4.3.6"
   },
   "jsr": {
@@ -22,8 +24,8 @@
     }
   },
   "npm": {
-    "@hono/node-server@1.19.13_hono@4.12.12": {
-      "integrity": "sha512-TsQLe4i2gvoTtrHje625ngThGBySOgSK3Xo2XRYOdqGN1teR8+I7vchQC46uLJi8OF62YTYA3AhSpumtkhsaKQ==",
+    "@hono/node-server@1.19.14_hono@4.12.12": {
+      "integrity": "sha512-GwtvgtXxnWsucXvbQXkRgqksiH2Qed37H9xHZocE5sA3N8O8O8/8FA3uclQXxXVzc9XBZuEOMK7+r02FmSpHtw==",
       "dependencies": [
         "hono"
       ]
@@ -548,7 +550,9 @@
     "dependencies": [
       "jsr:@hono/hono@^4.12.12",
       "jsr:@std/assert@1",
+      "npm:@hono/node-server@^1.19.14",
       "npm:@modelcontextprotocol/sdk@^1.29.0",
+      "npm:hono@^4.12.12",
       "npm:openai@^6.34.0"
     ]
   }

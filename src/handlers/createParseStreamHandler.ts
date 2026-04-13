@@ -1,5 +1,5 @@
 import { OpenAI } from "openai/client.mjs";
-import { ToolCall } from "@src/llm/memory.ts";
+import { Memory, ToolCall } from "@src/llm/memory.ts";
 
 export function createParseStreamHandler() {
   return parseStreamHandler((s: string) => {
@@ -10,6 +10,7 @@ export function createParseStreamHandler() {
 function parseStreamHandler(onChunk?: (chunk: string) => unknown) {
   return async (data: {
     stream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
+    memory: Memory;
   }) => {
     const { toolCalls, fullText, fullReasoningText } = await readStream(
       data.stream,
@@ -22,6 +23,7 @@ function parseStreamHandler(onChunk?: (chunk: string) => unknown) {
         data: {
           fullText,
           fullReasoningText,
+          memory: data.memory,
         },
       };
     } else {
@@ -29,6 +31,7 @@ function parseStreamHandler(onChunk?: (chunk: string) => unknown) {
         type: "toolcallreq",
         data: {
           toolCalls,
+          memory: data.memory,
         },
       };
     }
