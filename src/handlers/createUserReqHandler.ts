@@ -1,5 +1,5 @@
-import { sendToLLm } from "../llm/api.ts";
-import { Memory } from "../llm/memory.ts";
+import { sendToLLm } from "@src/llm/api.ts";
+import { Memory } from "@src/llm/memory.ts";
 
 export function createUserReqHandler() {
   return async (data: { prompt: string }) => {

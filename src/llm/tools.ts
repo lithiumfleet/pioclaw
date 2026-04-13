@@ -43,7 +43,8 @@ export async function callTool(
 }
 
 async function initServers() {
-  const mcpsText = await Deno.readTextFile("../mcps.json");
+  const mcpJsonPath = Deno.env.get("MCPS_PATH")!;
+  const mcpsText = await Deno.readTextFile(mcpJsonPath);
   const mcpsConfig = JSON.parse(mcpsText);
   const serverConfigs: Record<string, ServerConfig> = mcpsConfig.servers;
   for (const [name, config] of Object.entries(serverConfigs)) {

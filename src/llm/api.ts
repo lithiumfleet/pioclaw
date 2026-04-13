@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { Memory } from "./memory.ts";
 import { allTools } from "./tools.ts";
 
-const apiKey = await Deno.readTextFile("../.key").then((text) => text.trim());
+const apiKey = Deno.env.get("API_KEY");
 const openai = new OpenAI({
   apiKey,
   baseURL: "https://api.deepseek.com/v1",

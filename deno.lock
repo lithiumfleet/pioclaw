@@ -1,12 +1,16 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@hono/hono@^4.12.12": "4.12.12",
     "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/internal@^1.0.12": "1.0.12",
     "npm:@modelcontextprotocol/sdk@^1.29.0": "1.29.0_zod@4.3.6",
     "npm:openai@^6.34.0": "6.34.0_zod@4.3.6"
   },
   "jsr": {
+    "@hono/hono@4.12.12": {
+      "integrity": "dc765178d38b5c4619b358062f6aa5514f7205bb0530b2823ff6265bec69c535"
+    },
     "@std/assert@1.0.19": {
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
       "dependencies": [
@@ -542,6 +546,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@hono/hono@^4.12.12",
       "jsr:@std/assert@1",
       "npm:@modelcontextprotocol/sdk@^1.29.0",
       "npm:openai@^6.34.0"

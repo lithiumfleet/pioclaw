@@ -1,5 +1,5 @@
 import { OpenAI } from "openai/client.mjs";
-import { ToolCall } from "../llm/memory.ts";
+import { ToolCall } from "@src/llm/memory.ts";
 
 export function createParseStreamHandler() {
   return parseStreamHandler((s: string) => {

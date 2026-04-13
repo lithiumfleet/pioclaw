@@ -1,6 +1,6 @@
-import { sendToLLm } from "../llm/api.ts";
-import { Memory, ToolCall } from "../llm/memory.ts";
-import { callTool } from "../llm/tools.ts";
+import { sendToLLm } from "@src/llm/api.ts";
+import { Memory, ToolCall } from "@src/llm/memory.ts";
+import { callTool } from "@src/llm/tools.ts";
 
 export function createToolCallHandler() {
   return async function toolCallHandler(data: { toolCalls: ToolCall[] }) {

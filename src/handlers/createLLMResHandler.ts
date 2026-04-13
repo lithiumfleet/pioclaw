@@ -1,4 +1,4 @@
-import { Memory } from "../llm/memory.ts";
+import { Memory } from "@src/llm/memory.ts";
 
 export function createLLMResHandler() {
   return (data: { fullText: string; fullReasoningText: string }) => {
