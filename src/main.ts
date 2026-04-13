@@ -6,7 +6,7 @@ if (import.meta.main) {
   start();
   input({
     type: "userreq",
-    data: { prompt: "Desktop/pioclaw下的实验报告是老师给的参考报告, 告诉我如果需要写这样一份报告我需要做哪些实验" },
+    data: { prompt: "尝试用powershell执行一些正确和错误的命令, 让我看到agent tool call有没有问题, 告诉我你能不能看到控制台的输出,尤其是错误时的报错信息能不能看到" },
   });
   setTimeout(() => {
     end();

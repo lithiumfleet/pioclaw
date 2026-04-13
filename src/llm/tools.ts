@@ -36,7 +36,7 @@ export async function callTool(
         name: toolName,
         arguments: args,
       });
-      return result;
+      return typeof result === "string" ? result : JSON.stringify(result);
     }
   }
   return `Tool "${toolName}" not found in any MCP server`;
