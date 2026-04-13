@@ -6,7 +6,7 @@ if (import.meta.main) {
   start();
   input({
     type: "userreq",
-    data: { prompt: "说明C:\Users\PotassiumPC\Desktop\pioclaw\pdfs下数电实验报告中异步十进制计数器是怎么实现的" },
+    data: { prompt: "我的推特账号一年没登陆被当成bot冻结了, 帮我写一份中英双语申请, 简明扼要" },
   });
   setTimeout(() => {
     end();

@@ -1,8 +1,8 @@
 import { Message, Dispatcher } from "./types.ts";
-import { MessageQueue, MessageQueueImpl } from "./queue.ts";
+import { MessageQueueImpl } from "./queue.ts";
 
 export function createAgentLoop(dispatcher: Dispatcher) {
-  const msgQue: MessageQueue = new MessageQueueImpl();
+  const msgQue = new MessageQueueImpl();
 
   const start = () => {
     if (!msgQue.isRunning) {

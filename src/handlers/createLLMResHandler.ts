@@ -1,8 +1,7 @@
 import { OpenAI } from "openai/client.mjs";
-import { fullContextMemory } from "../core/assets/memory.ts";
-import { callTool } from "../core/assets/tools.ts";
-import { sendToLLm } from "../core/api.ts";
-import { ToolCall } from "../core/types.ts";
+import { fullContextMemory, ToolCall } from "./memory.ts";
+import { callTool } from "./tools.ts";
+import { sendToLLm } from "./api.ts";
 
 export function createLLMResHandler() {
   return LLMStreamResHandler((s: string) => {
@@ -15,7 +14,7 @@ function LLMStreamResHandler(onChunk?: (chunk: string) => unknown) {
     stream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
   }) => {
     try {
-      const { toolCalls, fullText } = await readStream(data, onChunk);
+      const { toolCalls, fullText } = await readStream(data.stream, onChunk);
 
       // 如果没有工具调用，正常处理文本响应
       if (toolCalls.length == 0) {
@@ -85,23 +84,42 @@ function LLMStreamResHandler(onChunk?: (chunk: string) => unknown) {
     }
   };
 }
+// 扩展 OpenAI 的类型定义
+interface DeepSeekDelta extends OpenAI.Chat.Completions.ChatCompletionChunk.Choice.Delta {
+  reasoning_content?: string | null;
+}
+
+interface DeepSeekChunk extends OpenAI.Chat.Completions.ChatCompletionChunk {
+  choices: (Omit<OpenAI.Chat.Completions.ChatCompletionChunk.Choice, 'delta'> & {
+    delta: DeepSeekDelta;
+  })[];
+}
 
 async function readStream(
-  data: { stream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk> },
+  stream: AsyncIterable<DeepSeekChunk>,
   onChunk?: (chunk: string) => unknown,
 ) {
   let fullText = "";
+  let fullReasoningText = ""
 
   const toolCalls: ToolCall[] = [];
 
-  for await (const chunk of data.stream) {
+  for await (const chunk of stream) {
     const delta = chunk.choices[0]?.delta;
     const content = delta?.content || "";
+    const reasoningContent = delta?.reasoning_content || "";
 
     if (content) {
       fullText += content;
       if (onChunk) {
         onChunk(content);
+      }
+    }
+
+    if (reasoningContent) {
+      fullReasoningText += reasoningContent;
+      if (onChunk) {
+        onChunk(reasoningContent);
       }
     }
 

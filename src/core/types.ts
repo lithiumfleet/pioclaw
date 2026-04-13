@@ -8,12 +8,3 @@ export type Message = {
     data: Parameters<Dispatcher[K]>[0];
   };
 }[keyof Dispatcher];
-
-export type ToolCall = {
-  id: string;
-  type: "function";
-  function: {
-    name: string;
-    arguments: string;
-  };
-};

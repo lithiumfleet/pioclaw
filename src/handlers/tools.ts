@@ -6,12 +6,22 @@ interface ServerConfig {
   args: string[];
 }
 
-// 从 mcps.json 读取服务器配置
-const mcpsText = await Deno.readTextFile("../mcps.json");
-const mcpsConfig = JSON.parse(mcpsText);
-const serverConfigs: Record<string, ServerConfig> = mcpsConfig.servers;
+interface MCPTool {
+  name: string;
+  description?: string;
+  inputSchema: any;
+}
 
-export let allTools: DeepSeekTool[]  = [];
+interface DeepSeekTool {
+  type: "function";
+  function: {
+    name: string;
+    description?: string;
+    parameters: any;
+  };
+}
+
+export let allTools: DeepSeekTool[] = [];
 const clients: Record<string, Client> = {};
 
 export async function callTool(toolName: string, args: unknown) {
@@ -28,6 +38,9 @@ export async function callTool(toolName: string, args: unknown) {
 }
 
 async function initServers() {
+  const mcpsText = await Deno.readTextFile("../mcps.json");
+  const mcpsConfig = JSON.parse(mcpsText);
+  const serverConfigs: Record<string, ServerConfig> = mcpsConfig.servers;
   for (const [name, config] of Object.entries(serverConfigs)) {
     console.log(`connecting MCP Server: ${name}...`);
 
@@ -49,27 +62,14 @@ async function initServers() {
     }
   }
 
-  let mcpTools: MCPTool[]  = []
+  let mcpTools: MCPTool[] = [];
   for (const [_name, client] of Object.entries(clients)) {
     const tools = await client.listTools();
     mcpTools = mcpTools.concat(tools.tools);
   }
   allTools = convertMCPToDeepSeek(mcpTools);
 }
-interface MCPTool {
-  name: string;
-  description?: string;
-  inputSchema: any;
-}
 
-interface DeepSeekTool {
-  type: "function";
-  function: {
-    name: string;
-    description?: string;
-    parameters: any;
-  };
-}
 
 function convertMCPToDeepSeek(mcpTools: MCPTool[]): DeepSeekTool[] {
   return mcpTools.map((tool) => ({
@@ -81,4 +81,5 @@ function convertMCPToDeepSeek(mcpTools: MCPTool[]): DeepSeekTool[] {
     },
   }));
 }
+
 await initServers();

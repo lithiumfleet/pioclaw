@@ -1,4 +1,11 @@
-import { ToolCall } from "../types.ts";
+export type ToolCall = {
+  id: string;
+  type: "function";
+  function: {
+    name: string;
+    arguments: string;
+  };
+};
 
 export const fullContextMemory: (
   | {

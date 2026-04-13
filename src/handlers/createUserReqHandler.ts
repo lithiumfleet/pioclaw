@@ -1,5 +1,5 @@
-import { sendToLLm } from "../core/api.ts";
-import { fullContextMemory } from "../core/assets/memory.ts";
+import { sendToLLm } from "./api.ts";
+import { fullContextMemory } from "./memory.ts";
 
 export function createUserReqHandler() {
 
