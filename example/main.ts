@@ -1,10 +1,9 @@
 import { createAgentLoop } from "@src/core/agent.ts";
-import { dispatcher } from "@src/handlers/dispatcher.ts";
 import { memoryManager } from "@src/llm/memory.ts";
 
 if (import.meta.main) {
   const id = memoryManager().newMemory();
-  const { start, end, input } = createAgentLoop(dispatcher);
+  const { start, end, input } = createAgentLoop();
   start();
   input({
     type: "userreq",

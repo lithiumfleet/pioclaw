@@ -1,7 +1,7 @@
-import { Message, Dispatcher } from "./types.ts";
+import { dispatcher, Message } from "@src/handlers/dispatcher.ts";
 import { MessageQueueImpl } from "./queue.ts";
 
-export function createAgentLoop(dispatcher: Dispatcher) {
+export function createAgentLoop() {
   const msgQue = new MessageQueueImpl();
 
   const start = () => {
@@ -20,5 +20,4 @@ export function createAgentLoop(dispatcher: Dispatcher) {
     msgQue.enque(msg);
   };
 
-  return { start, end, input };
-}
+  return { start, end, input }; }

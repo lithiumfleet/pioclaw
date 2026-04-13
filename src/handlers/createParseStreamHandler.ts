@@ -1,20 +1,18 @@
 import { OpenAI } from "openai/client.mjs";
 import { Memory, ToolCall } from "@src/llm/memory.ts";
+import {
+  onChunk,
+  onReasoningChunk,
+  onToolRes,
+} from "@src/handlers/callbacks.ts";
 
 export function createParseStreamHandler() {
-  return parseStreamHandler((s: string) => {
-    Deno.stdout.writeSync(new TextEncoder().encode(s));
-  });
-}
-
-function parseStreamHandler(onChunk?: (chunk: string) => unknown) {
   return async (data: {
     stream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
     memory: Memory;
   }) => {
     const { toolCalls, fullText, fullReasoningText } = await readStream(
       data.stream,
-      onChunk,
     );
 
     if (toolCalls.length === 0) {
@@ -52,10 +50,7 @@ interface DeepSeekChunk extends OpenAI.Chat.Completions.ChatCompletionChunk {
   })[];
 }
 
-async function readStream(
-  stream: AsyncIterable<DeepSeekChunk>,
-  onChunk?: (chunk: string) => unknown,
-) {
+async function readStream(stream: AsyncIterable<DeepSeekChunk>) {
   let fullText = "";
   let fullReasoningText = "";
   const toolCalls: ToolCall[] = [];
@@ -74,8 +69,8 @@ async function readStream(
 
     if (reasoningContent) {
       fullReasoningText += reasoningContent;
-      if (onChunk) {
-        onChunk(reasoningContent);
+      if (onReasoningChunk) {
+        onReasoningChunk(reasoningContent);
       }
     }
 
@@ -106,6 +101,9 @@ async function readStream(
         }
       }
     }
+  }
+  if (onToolRes) {
+    onToolRes(JSON.stringify(toolCalls));
   }
   return { toolCalls, fullText, fullReasoningText };
 }

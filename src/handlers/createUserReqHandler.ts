@@ -2,7 +2,7 @@ import { sendToLLm } from "@src/llm/api.ts";
 import { Memory } from "@src/llm/memory.ts";
 
 export function createUserReqHandler() {
-  return async (data: { prompt: string; memory: Memory }) => {
+  return async (data: { prompt: string, memory: Memory }) => {
     try {
       console.log("user: ", data.prompt);
 
@@ -12,7 +12,7 @@ export function createUserReqHandler() {
         type: "parsestreamreq",
         data: {
           stream: await sendToLLm(data.memory),
-          memory: data.memory,
+          memory: data.memory
         },
       };
     } catch (error) {

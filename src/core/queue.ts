@@ -1,4 +1,4 @@
-import type { Message, Dispatcher } from "./types.ts";
+import { Dispatcher, Message } from "@src/handlers/dispatcher.ts";
 
 interface MessageQueue {
   enque(msg: Message): void;
