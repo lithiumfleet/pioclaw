@@ -1,5 +1,6 @@
-import { createAgentLoop } from "./core/agent.ts";
-import { dispatcher } from "./handlers/dispatcher.ts";
+import { createAgentLoop } from "../src/core/agent.ts";
+import { dispatcher } from "../src/handlers/dispatcher.ts";
+
 
 if (import.meta.main) {
   const { start, end, input } = createAgentLoop(dispatcher);
