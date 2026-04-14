@@ -102,7 +102,7 @@ async function readStream(stream: AsyncIterable<DeepSeekChunk>) {
       }
     }
   }
-  if (onToolRes) {
+  if (onToolRes && toolCalls.length !== 0) {
     onToolRes(JSON.stringify(toolCalls));
   }
   return { toolCalls, fullText, fullReasoningText };
