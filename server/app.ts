@@ -5,8 +5,8 @@ import { cors } from 'hono/cors'
 import { streamSSE } from 'hono/streaming'
 import { createAgentLoop } from '@src/core/agent.ts'
 import { memoryManager } from '@src/llm/memory.ts'
-import { setupAgentCallbacks, cleanupAgentCallbacks } from './agentCallbacks.ts'
-import { addEventStream, removeEventStreams, sendEvent } from './events.ts'
+import { setupAgentCallbacks } from './agentCallbacks.ts'
+import { addEventStream } from './events.ts'
 
 const app = new Hono()
 
