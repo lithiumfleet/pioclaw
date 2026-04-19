@@ -1,4 +1,6 @@
 import { Dispatcher, Message } from "@src/handlers/dispatcher.ts";
+import _mitt from "mitt";
+const mitt = _mitt as unknown as typeof _mitt.default;
 
 interface MessageQueue {
   enque(msg: Message): void;
@@ -15,6 +17,11 @@ export class MessageQueueImpl implements MessageQueue {
   }
   private signal: { resolve: () => void; promise: Promise<void> } | null = null;
   private abortController = new AbortController();
+  public events = mitt<{
+    waitting: undefined;
+    newMsg: Message;
+    finish: Message;
+  }>();
 
   private waitForMessages() {
     if (this.signal) return this.signal.promise;
@@ -27,6 +34,7 @@ export class MessageQueueImpl implements MessageQueue {
   }
 
   enque = (msg: Message): void => {
+    this.events.emit("newMsg", msg);
     this.queue.push(msg);
     if (this.signal) {
       this.signal.resolve();
@@ -40,6 +48,7 @@ export class MessageQueueImpl implements MessageQueue {
 
     while (!this.abortController.signal.aborted) {
       if (this.queue.length === 0) {
+        this.events.emit("waitting");
         await this.waitForMessages();
       }
 
@@ -61,6 +70,7 @@ export class MessageQueueImpl implements MessageQueue {
           console.error(`Error processing message ${msg.type}:`, err);
         }
       }
+      this.events.emit("finish", msg);
     }
     this.running = false;
   }

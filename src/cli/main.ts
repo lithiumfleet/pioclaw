@@ -2,8 +2,28 @@ import { createAgentLoop } from "@src/core/agent.ts";
 import { memoryManager } from "@src/llm/memory.ts";
 import { stdin as _stdin, stdout as _stdout } from "node:process";
 import * as readline from "node:readline";
+import { white, green, gray } from "@std/colors";
+import { onStream } from "@src/llm/api.ts";
 
-const { start, end, input } = createAgentLoop();
+const print = (s: string, colorFn?: (s: string) => string) => {
+  const output = colorFn ? colorFn(s) : s;
+  Deno.stdout.writeSync(new TextEncoder().encode(output));
+};
+
+onStream.on("newReasoningChunk", (s: string) => {
+  print(s, gray);
+});
+
+onStream.on("newToolRes", (s: string) => {
+  print(s, green);
+});
+
+onStream.on("newTextChunk", (s: string) => {
+  print(s, white);
+});
+
+const { start, end, input, events } = createAgentLoop();
+events.on("agentEndResp", ask)
 const id = memoryManager().newMemory();
 const memory = memoryManager().getMemory(id);
 
@@ -25,7 +45,7 @@ const rl = readline.createInterface({
 });
 
 function ask() {
-  rl.question("How can I help you? (type 'exit' to quit)\n> ", (answer) => {
+  rl.question("> ", (answer) => {
     callAgent(answer);
   });
 }
