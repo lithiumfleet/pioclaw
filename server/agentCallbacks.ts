@@ -1,4 +1,4 @@
-import { registerAgentCallbacks } from '@src/handlers/callbacks.ts'
+import { registerAgentCallbacks } from '@src/llm/callbacks.ts'
 import { sendEvent } from './events.ts'
 
 // 存储每个会话的累积输出
